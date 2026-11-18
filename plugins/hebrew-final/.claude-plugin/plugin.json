@@ -1,0 +1,1 @@
+{ "name": "hebrew-final", "version": "1.0.0", "description": "Holds the final reply of a turn until it is whole; a reply that is mostly English (50% or more Latin letters) is translated to Hebrew by one small model call before anything is shown or recorded, so the user never sees an English reply followed by a Hebrew one", "author": { "name": "Elad Elia" } }

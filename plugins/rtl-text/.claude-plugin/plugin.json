@@ -1,0 +1,1 @@
+{ "name": "rtl-text", "version": "1.0.0", "description": "Draws every reply line that opens with a Latin letter right-to-left (an invisible U+200F mark in the drawing only), so Hebrew replies stay right-aligned when a command, server name or ticket id opens a line", "author": { "name": "Elad Elia" } }

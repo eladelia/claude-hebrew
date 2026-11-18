@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+hooks/hebrew-guard.log
+.claude-plugin/types/
+plugins/*/.claude-plugin/types/
+.DS_Store

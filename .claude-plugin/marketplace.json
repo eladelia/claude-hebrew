@@ -1,0 +1,9 @@
+{
+  "name": "claude-hebrew",
+  "owner": { "name": "Elad Elia" },
+  "description": "Hebrew replies in Claude Code: right-aligned, in Hebrew, once",
+  "plugins": [
+    { "name": "rtl-text", "source": "./plugins/rtl-text", "description": "Draws reply lines that open with a Latin letter right-to-left, so Hebrew replies stay right-aligned" },
+    { "name": "hebrew-final", "source": "./plugins/hebrew-final", "description": "A final reply that is mostly English is translated to Hebrew before it is shown or recorded" }
+  ]
+}
