@@ -4,6 +4,12 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and versions follow
 [Semantic Versioning](https://semver.org/).
 
+## [1.0.2] - 2026-11-18
+
+### Changed
+
+- `rtl-text` plugin 1.0.2: the plugin description and the header comment of `register.ts` now state the 1.0.1 behavior (a Hebrew line that opens with a Latin term is drawn right-to-left; a line with no Hebrew stays left-to-right). No change in behavior.
+
 ## [1.0.1] - 2026-11-18
 
 ### Changed

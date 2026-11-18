@@ -1,4 +1,4 @@
-// rtl-text 1.0.0: display only. A reply line that opens with a Latin letter is drawn left-to-right by the app
+// rtl-text 1.0.2: display only. A Hebrew reply line that opens with a Latin term is drawn left-to-right by the app
 // (direction follows the first strong letter), which left-aligns the whole paragraph for a Hebrew reader. This
 // mod prepends a right-to-left mark (U+200F, invisible) to such lines in the DRAWING of an assistant block, on
 // every surface. The stored message and what the model wrote are untouched. Lines inside code fences are left
