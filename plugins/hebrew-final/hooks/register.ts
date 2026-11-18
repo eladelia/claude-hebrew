@@ -1,4 +1,4 @@
-// hebrew-final 1.2.0: the final reply reaches the user in Hebrew, once.
+// hebrew-final 1.3.0: the final reply reaches the user in Hebrew, once.
 // A `turn.step` hook holds every chunk of a main-loop model response until the response is whole. A step that
 // calls tools is released as it came (working notes between tool calls may stay English). A step with no tool
 // call is the turn's answer: its visible text is measured, and when Latin letters are 50% or more of its letters
@@ -23,12 +23,6 @@ const SYSTEM = [
   'Use a plain hyphen only, never an em dash. Do not add, omit, summarize or comment; output only the translated reply, nothing else.',
 ].join(' ')
 
-const BOX_SYSTEM = [
-  'You translate the short texts of a Claude Code end-of-turn box into natural Hebrew: a recap (two or three sentences), a question (one sentence) and button labels (one to three words each).',
-  'The input holds these parts separated by a line of five equals signs (=====). Output the same number of parts, in the same order, separated the same way, translated; an empty part stays empty.',
-  'Keep commands, file paths, identifiers, server names and product names exactly as they are. Begin each part with a Hebrew word or a digit. Plain hyphen only. Output nothing else.',
-].join(' ')
-
 type Chunk = { kind: string; index?: number; text?: string; [k: string]: unknown }
 
 export function latinShare(text: string): { heb: number; lat: number; share: number } {
@@ -39,35 +33,27 @@ export function latinShare(text: string): { heb: number; lat: number; share: num
 }
 
 export const register: Register = on => {
-  // 1.2.0: the box is translated instead of refused. A refusal drew a red "Failed" row for the
-  // tool call; a rewrite of the call's own input (next({ ...e, recap, ask, actions })) draws nothing extra and needs
-  // no second call by the model. The recap, the ask and each label are translated together in one small call; if
-  // the translation fails the box goes through as written (the writing rules still ask for Hebrew).
+  // 1.3.0: the box is refused when it is mostly English, and the model calls again in Hebrew.
+  // 0.3.0 tried to translate it and pass the rewrite down; the engine accepted the rewrite but the desktop still drew
+  // the English box (it reads the call as the model sent it), so the refusal is back. The refused call's row, which
+  // the desktop drew as a red "Failed", is drawn below as one quiet line instead.
   on('tool.call', { tool: 'mcp__ccd_turn__wrap_up' }, async ($, e, next) => {
-    const x = e as unknown as { recap?: string; ask?: string; actions?: { label?: string; action?: string }[] }
-    const labels = (x.actions ?? []).map(a => a.label ?? '')
-    const parts = [x.recap ?? '', x.ask ?? '', ...labels]
-    const { heb, lat, share } = latinShare(parts.join('\n'))
-    if (heb + lat < 10 || share < SHARE) return next(e)
-    const SEP = '\n=====\n'
-    try {
-      const r = await $.model.complete({
-        model: TRANSLATOR,
-        system: BOX_SYSTEM,
-        prompt: parts.join(SEP),
-        effort: 'low',
-        maxTokens: 2000,
-        timeoutMs: 60000,
-      })
-      if (!r.isAnswered) { return next(e) }
-      const out = r.text.split(/\n?=====\n?/).map(s => s.trim())
-      if (out.length !== parts.length) { return next(e) }
-      const [recap, ask, ...newLabels] = out
-      const actions = (x.actions ?? []).map((a, i) => (a.label ? { ...a, label: newLabels[i] || a.label } : a)) 
-      return next({ ...e, ...(x.recap !== undefined ? { recap } : {}), ...(x.ask !== undefined ? { ask } : {}), ...(x.actions ? { actions } : {}) } as typeof e)
-    } catch (err) { 
-      return next(e)
+    const x = e as unknown as { recap?: string; ask?: string; actions?: { label?: string }[] }
+    const text = [x.recap ?? '', x.ask ?? '', ...(x.actions ?? []).map(a => a.label ?? '')].join('\n')
+    const { heb, lat, share } = latinShare(text)
+    if (heb + lat >= 10 && share >= SHARE) {
+      return { deny: 'תיבת סיום התור (recap, ask, labels) כתובה באנגלית, והמשתמש קורא אותה. לקרוא שוב ל-wrap_up עם אותו תוכן בעברית: recap בעברית, ask בעברית, וכל label בעברית.' }
     }
+    return next(e)
+  }).catch(($, e, next) => next(e))
+
+  // The refused call's row: one quiet Hebrew line in place of the red "Failed" row. ctrl+o still shows the row.
+  on('ui.render', { component: 'ToolUse' }, async ($, e, next) => {
+    const p = e.props as { tool?: string; isErrored?: boolean; isRunning?: boolean; isExpanded?: boolean; output?: unknown }
+    if (p.tool !== 'mcp__ccd_turn__wrap_up' || !p.isErrored || p.isRunning || p.isExpanded) return next(e)
+    if (!String(p.output ?? '').includes('תיבת סיום התור')) return next(e)
+    const { Text } = $.ui.resolve(e)
+    return h(Text, { dimColor: true }, 'תיבת הסיום נכתבה מחדש בעברית')
   }).catch(($, e, next) => next(e))
 
   on('turn.step', async function* ($, e, next) {

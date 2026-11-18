@@ -4,6 +4,12 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and versions follow
 [Semantic Versioning](https://semver.org/).
 
+## [1.3.0] - 2026-11-18
+
+### Changed
+
+- `hebrew-final` plugin 1.3.0: a mostly-English end-of-turn box is refused again, and the model writes it again in Hebrew. The 1.2.0 rewrite was accepted by the engine, but the desktop app drew the box as the model first sent it, so the English box still showed. The refused call's row is now drawn as one quiet Hebrew line instead of a red "Failed" row.
+
 ## [1.2.0] - 2026-11-18
 
 ### Changed
