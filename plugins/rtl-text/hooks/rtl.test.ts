@@ -11,11 +11,12 @@ test('a line opening with a Latin word is drawn with a right-to-left mark, on te
     return h(Text, {}, seen)
   })
   for (const surface of ['terminal', 'desktop'] as const) {
-    const ui = await $.ui.mount({ ...ROW, surface, props: { text: 'TERM10 שלח את המייל.\nהשורה הזאת בעברית.\n```\nls -la\n```\n10 שרתים עלו.', isFirstOfReply: true } })
+    const ui = await $.ui.mount({ ...ROW, surface, props: { text: 'TERM10 שלח את המייל.\nהשורה הזאת בעברית.\n```\nls -la\n```\n10 שרתים עלו.\nChecking the service now.', isFirstOfReply: true } })
     expect(seen.split('\n')[0]).toBe('‏TERM10 שלח את המייל.')
     expect(seen.split('\n')[1]).toBe('השורה הזאת בעברית.')
     expect(seen.split('\n')[3]).toBe('ls -la')
     expect(seen.split('\n')[5]).toBe('10 שרתים עלו.')
+    expect(seen.split('\n')[6]).toBe('Checking the service now.')
     await ui.unmount()
   }
 })

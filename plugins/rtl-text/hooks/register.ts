@@ -17,13 +17,19 @@ function opensLatin(line: string): boolean {
   return false
 }
 
+// 0.1.1 / 1.0.1: only a line that holds Hebrew is turned right-to-left. A line with no Hebrew at all (working
+// notes in English between tool calls, or a reply the model wrote in English) stays left-to-right, as English reads.
+function hasHebrew(line: string): boolean {
+  return HEB.test(line)
+}
+
 export function rtlFix(text: string): string {
   let fence = false
   return text.split('\n').map(line => {
     const s = line.trimStart()
     if (s.startsWith('```')) { fence = !fence; return line }
     if (fence || !s || s.startsWith(RLM)) return line
-    if (!opensLatin(s)) return line
+    if (!opensLatin(s) || !hasHebrew(s)) return line
     const pad = line.length - s.length
     return line.slice(0, pad) + RLM + s
   }).join('\n')

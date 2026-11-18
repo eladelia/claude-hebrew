@@ -6,7 +6,7 @@
 
 1. `rules/CLAUDE.md`: קטע כללים שמצרפים לקובץ הכללים הגלובלי. זה מה שמונע אנגלית מראש, וברוב המוחלט של המקרים זה מספיק.
 2. `plugins/hebrew-final`: תוסף שמחזיק את התשובה הסופית עד שהיא שלמה, ואם רובה אנגלית (50% ומעלה מהאותיות) מתרגם אותה לעברית בקריאת מודל קטנה אחת לפני שהיא מוצגת. אתם רואים תשובה אחת, בעברית, והמודל לא חוזר על העבודה.
-3. `plugins/rtl-text`: תוסף תצוגה שמיישר לימין שורה שנפתחת במונח באנגלית (שם שרת, פקודה, מזהה). האפליקציה מיישרת פסקה לפי האות הראשונה שלה, והתוסף מוסיף סימן כיוון בלתי נראה בציור בלבד.
+3. `plugins/rtl-text`: תוסף תצוגה שמיישר לימין שורה שנפתחת במונח באנגלית (שם שרת, פקודה, מזהה) ויש בה עברית. האפליקציה מיישרת פסקה לפי האות הראשונה שלה, והתוסף מוסיף סימן כיוון בלתי נראה בציור בלבד. שורה שכולה אנגלית נשארת מיושרת לשמאל, כמו שאנגלית נקראת.
 4. `hooks/hebrew-guard.py` עם `hooks/settings-snippet.json`: שומר שרץ בסיום כל תשובה. אם בכל זאת יצאה תשובה שרובה אנגלית, הוא מבקש מהמודל פעם אחת לכתוב אותה מחדש בעברית. עם שני התוספים הוא כמעט לא מופעל.
 
 ## התקנה
@@ -65,7 +65,7 @@ claude plugin install rtl-text@claude-hebrew --scope user
 
 **claude-hebrew** makes Claude Code answer Hebrew speakers in Hebrew, once, and right-aligned. The work itself (code, commands, tool calls, working notes) stays in English; only the final reply you read is in Hebrew.
 
-It has four parts: a rules snippet for `~/.claude/CLAUDE.md` that prevents English replies up front; the `hebrew-final` plugin, which translates a final reply that is still mostly English (50% or more Latin letters) with one small model call before it is shown; the `rtl-text` plugin, which draws lines that open with a Latin word right-to-left; and an optional Stop hook (`hooks/hebrew-guard.py`) as a last safety net. Everything runs locally and needs a Claude Code version with plugin support.
+It has four parts: a rules snippet for `~/.claude/CLAUDE.md` that prevents English replies up front; the `hebrew-final` plugin, which translates a final reply that is still mostly English (50% or more Latin letters) with one small model call before it is shown; the `rtl-text` plugin, which draws lines that open with a Latin word but hold Hebrew right-to-left (all-English lines stay left-to-right); and an optional Stop hook (`hooks/hebrew-guard.py`) as a last safety net. Everything runs locally and needs a Claude Code version with plugin support.
 
 Install the plugins:
 

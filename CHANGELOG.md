@@ -4,6 +4,12 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and versions follow
 [Semantic Versioning](https://semver.org/).
 
+## [1.0.1] - 2026-11-18
+
+### Changed
+
+- `rtl-text` plugin 1.0.1: the right-to-left mark is added only to a line that holds Hebrew; a line with no Hebrew at all (working notes between tool calls, or a reply written in English) stays left-to-right.
+
 ## [1.0.0] - 2026-11-18
 
 ### Added
