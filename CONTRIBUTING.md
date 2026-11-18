@@ -35,4 +35,4 @@ To try a change locally, add your clone as a marketplace (`claude plugin marketp
 
 ## Language
 
-Code, comments and commit messages are in English. User-facing Hebrew text (the README's Hebrew part, `rules/CLAUDE.md`, the translation prompt) keeps its rules: every line opens with a Hebrew word or a digit, plain hyphens only, no tables.
+Code, comments and commit messages are in English. User-facing Hebrew text (`rules/CLAUDE.md` and the Hebrew strings in the code) keeps its rules: every line opens with a Hebrew word or a digit, plain hyphens only, no tables.
