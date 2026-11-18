@@ -4,6 +4,12 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and versions follow
 [Semantic Versioning](https://semver.org/).
 
+## [1.1.0] - 2026-11-18
+
+### Added
+
+- `hebrew-final` plugin 1.1.0: the desktop app's end-of-turn box (the `wrap_up` tool: recap, question and button labels) is held to Hebrew too. A box written mostly in English is refused before it is drawn, and the model writes it again in Hebrew.
+
 ## [1.0.2] - 2026-11-18
 
 ### Changed

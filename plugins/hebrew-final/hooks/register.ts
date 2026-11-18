@@ -1,4 +1,4 @@
-// hebrew-final 1.0.0: the final reply reaches the user in Hebrew, once.
+// hebrew-final 1.1.0: the final reply reaches the user in Hebrew, once.
 // A `turn.step` hook holds every chunk of a main-loop model response until the response is whole. A step that
 // calls tools is released as it came (working notes between tool calls may stay English). A step with no tool
 // call is the turn's answer: its visible text is measured, and when Latin letters are 50% or more of its letters
@@ -33,6 +33,19 @@ export function latinShare(text: string): { heb: number; lat: number; share: num
 }
 
 export const register: Register = on => {
+  // 1.1.0: the end-of-turn box of the desktop app (the wrap_up tool: recap, ask, button labels)
+  // is read by the person too, and neither the Stop hook nor turn.step sees it (it is a tool call, not reply
+  // text). A box written mostly in English is refused before it is drawn, and the model calls again in Hebrew.
+  on('tool.call', { tool: 'mcp__ccd_turn__wrap_up' }, async ($, e, next) => {
+    const x = e as unknown as { recap?: string; ask?: string; actions?: { label?: string }[] }
+    const text = [x.recap ?? '', x.ask ?? '', ...(x.actions ?? []).map(a => a.label ?? '')].join('\n')
+    const { heb, lat, share } = latinShare(text)
+    if (heb + lat >= 10 && share >= SHARE) {
+      return { deny: 'תיבת סיום התור (recap, ask, labels) כתובה באנגלית, והמשתמש קורא אותה. לקרוא שוב ל-wrap_up עם אותו תוכן בעברית: recap בעברית, ask בעברית, וכל label בעברית.' }
+    }
+    return next(e)
+  }).catch(($, e, next) => next(e))
+
   on('turn.step', async function* ($, e, next) {
     if (e.agentId !== undefined) return yield* next(e)
     // Hold the whole response. The stream's return value is the step's result.

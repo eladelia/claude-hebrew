@@ -9,7 +9,7 @@ A small package for Hebrew speakers who use [Claude Code](https://claude.com/cla
 | Part | What it does |
 | --- | --- |
 | `rules/CLAUDE.md` | A rules snippet you append to your global `~/.claude/CLAUDE.md`. It prevents English replies up front, and in the vast majority of cases it is enough on its own. |
-| `plugins/hebrew-final` | Holds the final reply of a turn until it is whole. If the reply is mostly English (50% or more of its letters are Latin, not counting code), it is translated to Hebrew by one small model call before it is shown. You see one reply, in Hebrew, and the model does not redo the work. |
+| `plugins/hebrew-final` | Holds the final reply of a turn until it is whole. If the reply is mostly English (50% or more of its letters are Latin, not counting code), it is translated to Hebrew by one small model call before it is shown. You see one reply, in Hebrew, and the model does not redo the work. The desktop app's end-of-turn box (recap, question, buttons) is held to Hebrew too. |
 | `plugins/rtl-text` | Display only. The app sets a paragraph's direction from its first letter, so a Hebrew line that opens with a Latin term (a command, a server name, a ticket id) is left-aligned. The plugin adds an invisible right-to-left mark to such lines in the drawing only. Lines with no Hebrew stay left-to-right. |
 | `hooks/hebrew-guard.py` + `hooks/settings-snippet.json` | An optional Stop hook that runs after every reply. If a reply still comes out mostly English, it asks the model once to rewrite it in Hebrew. With both plugins installed it almost never fires. |
 
