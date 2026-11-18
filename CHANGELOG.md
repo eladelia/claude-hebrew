@@ -4,6 +4,12 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and versions follow
 [Semantic Versioning](https://semver.org/).
 
+## [1.2.0] - 2026-11-18
+
+### Changed
+
+- `hebrew-final` plugin 1.2.0: a mostly-English end-of-turn box is now translated instead of refused. The recap, question and button labels are translated together in one small model call and the Hebrew version is drawn, with no failed tool call on screen and no second call by the model. If the translation fails, the box goes through as written.
+
 ## [1.1.0] - 2026-11-18
 
 ### Added
